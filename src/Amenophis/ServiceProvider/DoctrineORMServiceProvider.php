@@ -82,11 +82,6 @@ class DoctrineORMServiceProvider implements \Silex\ServiceProviderInterface
         });
     }
 
-    public function loadDoctrineConfiguration(Application $app)
-    {
-        
-    }
-
     public function boot(Application $app) {
         
     }
