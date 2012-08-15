@@ -1,0 +1,23 @@
+{
+    "name": "amenophis/silex-doctrineorm",
+    "type": "library",
+    "description": "Doctrine ORM for Silex",
+    "keywords": ["silex","doctrine", "orm"],
+    "homepage": "https://github.com/Amenophis/silex-doctrineorm",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jérémy LEHERPEUR",
+            "email": "jeremy@leherpeur.net",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Amenophis": "src"
+        }
+    }
+}
