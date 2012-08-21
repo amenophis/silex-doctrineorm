@@ -26,7 +26,7 @@ class DoctrineORMServiceProvider implements \Silex\ServiceProviderInterface
         //Load Doctrine Configuration
         $app['db.configuration'] = $app->share(function() use($app) {
             $config = new ORMConfiguration;
-            $cache = new ApcCache;
+            $cache = ($app['debug'] == false) ? new ApcCache : new ArrayCache;
             $config->setMetadataCacheImpl($cache);
             $config->setQueryCacheImpl($cache);
 
