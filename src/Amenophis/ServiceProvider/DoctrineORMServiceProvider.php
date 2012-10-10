@@ -8,13 +8,16 @@ use Doctrine\DBAL\Configuration as DBALConfiguration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Configuration as ORMConfiguration;
 use Doctrine\ORM\Mapping\Driver\DriverChain;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\EventManager;
+
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
 use Silex\Application;
 use Silex\ExtensionInterface;
@@ -25,6 +28,9 @@ class DoctrineORMServiceProvider implements \Silex\ServiceProviderInterface
     {
         //Load Doctrine Configuration
         $app['db.configuration'] = $app->share(function() use($app) {
+            
+            AnnotationRegistry::registerAutoloadNamespace("Doctrine\ORM\Mapping", __DIR__.'/../../../../../doctrine/orm/lib');
+            
             $config = new ORMConfiguration;
             $cache = ($app['debug'] == false) ? new ApcCache : new ArrayCache;
             $config->setMetadataCacheImpl($cache);
@@ -34,7 +40,8 @@ class DoctrineORMServiceProvider implements \Silex\ServiceProviderInterface
             foreach((array)$app['db.orm.entities'] as $entity) {
                 switch($entity['type']) {
                     case 'annotation':
-                        $driver = $config->newDefaultAnnotationDriver((array)$entity['path']);
+                        $reader = new AnnotationReader();
+                        $driver = new AnnotationDriver($reader, (array)$entity['path']);
                         $chain->addDriver($driver, $entity['namespace']);
                         break;
                     /*case 'yml':
